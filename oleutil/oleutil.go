@@ -1,6 +1,7 @@
 package oleutil
 
 import (
+	"log"
 	"reflect"
 	"syscall"
 	"unsafe"
@@ -46,8 +47,10 @@ func CallMethod(disp *ole.IDispatch, name string, params ...interface{}) (result
 	var dispid []int32
 	dispid, err = disp.GetIDsOfName([]string{name})
 	if err != nil {
+		log.Printf("oleutil GetIDsOfName %v err:%v", name, err)
 		return
 	}
+	log.Printf("oleutil Invoke %v params:\n  %#v", name, params)
 	result, err = disp.Invoke(dispid[0], ole.DISPATCH_METHOD, params...)
 	return
 }
@@ -64,6 +67,7 @@ func GetProperty(disp *ole.IDispatch, name string, params ...interface{}) (resul
 	var dispid []int32
 	dispid, err = disp.GetIDsOfName([]string{name})
 	if err != nil {
+		log.Printf("oleutil GetProperty %v err:%v", name, err)
 		return
 	}
 	result, err = disp.Invoke(dispid[0], ole.DISPATCH_PROPERTYGET, params...)

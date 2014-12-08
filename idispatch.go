@@ -1,6 +1,7 @@
 package ole
 
 import (
+	"log"
 	"syscall"
 	"unsafe"
 )
@@ -211,6 +212,7 @@ func invoke(disp *IDispatch, dispid int32, dispatch int16, params ...interface{}
 			bs := BstrToString(excepInfo.bstrDescription)
 			err = NewErrorWithDescription(hr, bs)
 		}
+		log.Printf("%x err:%v\n", hr, err)
 	}
 	for _, varg := range vargs {
 		if varg.VT == VT_BSTR && varg.Val != 0 {
